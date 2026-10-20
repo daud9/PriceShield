@@ -376,3 +376,16 @@ html, body { width: 100%; }
   padding: 6px 8px;
 }
 .footnote { padding: 4px 4px 8px; }
+
+/* Full-width layout for every screen (landing, tracked products, dashboard, compare) */
+#root { width: 100%; min-height: 100vh; }
+.wrap {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) 16px calc(40px + env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+}
+.wrap > * { min-width: 0; }
+.wrap .brand { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; }
+.wrap .card { width: 100%; box-sizing: border-box; }
