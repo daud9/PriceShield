@@ -3,10 +3,12 @@ import {
   compareAlternatives, evaluatePlan, Frequency, PlanInput, PlanResult, standardPriceShocks,
 } from "./lib/engine";
 import { formatMoney, MoneyError, parseMoney } from "./lib/money";
-import { connectNimiq, isInNimiqPay } from "./nimiq/nimiq";
+import { connectNimiq } from "./nimiq/nimiq";
 import TrackedProducts from "./components/TrackedProducts";
+import Landing from "./components/Landing";
+import Dashboard from "./components/Dashboard";
 
-type Screen = "intro" | "form" | "plan" | "track";
+type Screen = "intro" | "form" | "plan" | "track" | "dashboard";
 
 interface Form {
   productName: string;
@@ -102,28 +104,21 @@ export default function App() {
     };
   }, [input, alts, target]);
 
+  if (screen === "dashboard") {
+    return <Dashboard onBack={() => setScreen("intro")} />;
+  }
+
   if (screen === "track") {
     return <TrackedProducts onBack={() => setScreen("intro")} />;
   }
 
   if (screen === "intro") {
     return (
-      <main className="wrap">
-        <header className="brand">
-          <span className="logo">PriceShield</span>
-          <span className="tag">Know when you can afford it.</span>
-        </header>
-        <section className="hero">
-          <h1>Plan a big purchase before prices move.</h1>
-          <p>
-            PriceShield works out how much you need to save each week, checks if your date is realistic,
-            and recalculates when the price changes.
-          </p>
-          <button className="primary" onClick={() => setScreen("form")}>Create your first goal</button>
-          <button className="ghost" onClick={() => setScreen("track")}>Track a product</button>
-          {isInNimiqPay() && <p className="muted small">Connected to Nimiq Pay.</p>}
-        </section>
-      </main>
+      <Landing
+        onCreateGoal={() => setScreen("track")}
+        onTrackProduct={() => setScreen("track")}
+        onDashboard={() => setScreen("dashboard")}
+      />
     );
   }
 

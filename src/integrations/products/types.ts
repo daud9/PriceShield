@@ -27,6 +27,7 @@ export interface TrackedProduct {
   history: PriceObservation[]; // never empty
   trackingMode: "manual";
   createdAt: string;
+  archived?: boolean;
 }
 
 export type LookupResult =

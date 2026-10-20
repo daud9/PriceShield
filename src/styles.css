@@ -132,3 +132,56 @@ button.ghost { background: transparent; color: var(--text); border: 1px solid rg
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* Landing page */
+.logo-lockup { display: inline-flex; align-items: center; gap: 8px; }
+.shield-logo { width: 28px; height: 28px; flex: none; }
+.eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+.landing .hero { padding: 24px 0 4px; }
+.landing .hero h1 { font-size: clamp(2rem, 8vw, 2.6rem); }
+.lead { color: var(--muted); font-size: 1.05rem; margin: 0; }
+.hero-actions { display: grid; gap: 10px; }
+.hero-actions .ghost { width: 100%; }
+.preview { border-color: rgba(139, 108, 255, 0.35); }
+.preview h3 { margin: 0; font-size: 1rem; }
+.benefits { display: grid; gap: 12px; }
+.benefit {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.benefit h3 { margin: 0 0 4px; font-size: 1rem; }
+.benefit p { margin: 0; }
+.footnote { display: grid; gap: 6px; padding: 8px 4px 16px; }
+.footnote p { margin: 0; }
+
+@media (min-width: 640px) {
+  .hero-actions { grid-template-columns: 1fr 1fr; }
+}
+
+/* Dashboard, chart and report */
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.row-between h3 { margin: 0; font-size: 1rem; }
+.chart { margin: 0; display: grid; gap: 6px; }
+.chart svg { width: 100%; height: auto; background: rgba(255, 255, 255, 0.02); border-radius: 12px; }
+.report { display: grid; gap: 10px; }
+.report-text {
+  margin: 0;
+  padding: 12px;
+  background: var(--navy-900);
+  border-radius: 12px;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  color: var(--muted);
+}
+.notice.small { margin: 0; }

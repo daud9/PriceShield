@@ -7,6 +7,7 @@ import { loadProducts, saveProducts } from "../lib/productStorage";
 import { latestObservation, recordPrice } from "../lib/priceHistory";
 import { alertsForChange, planInput, type Alert } from "../lib/alerts";
 import { validateProductUrl } from "../lib/url";
+import PriceIntelligence from "./PriceIntelligence";
 
 interface FormState {
   url: string;
@@ -204,6 +205,8 @@ export default function TrackedProducts({ onBack }: { onBack: () => void }) {
         ) : (
           <p className="errors">{outcome.errors.join(" ")}</p>
         )}
+
+        <PriceIntelligence product={p} today={today} />
 
         {outcome.ok && outcome.result.suggestions.length > 0 && (
           <div className="notice">
