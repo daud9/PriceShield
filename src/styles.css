@@ -389,3 +389,5 @@ html, body { width: 100%; }
 .wrap > * { min-width: 0; }
 .wrap .brand { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; }
 .wrap .card { width: 100%; box-sizing: border-box; }
+
+.stack { display: grid; gap: 8px; }

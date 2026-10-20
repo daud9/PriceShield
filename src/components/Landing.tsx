@@ -75,15 +75,17 @@ function PriceTagPreview() {
         <path d="M0 20 L50 28 L100 18 L150 34 L200 26 L250 44 L300 40" fill="none" stroke="#ffc857" strokeWidth="2.5" strokeLinejoin="round" />
       </svg>
       <div className="ticket-grid">
-        <div><span className="muted small">Current</span><strong>USD 700</strong></div>
-        <div><span className="muted small">Target</span><strong>USD 650</strong></div>
-        <div><span className="muted small">Saved</span><strong>USD 200</strong></div>
-        <div><span className="muted small">Remaining</span><strong>USD 500</strong></div>
+        <div><span className="muted small">Current price</span><strong>USD 700</strong></div>
+        <div><span className="muted small">Target price</span><strong>USD 650</strong></div>
+        <div><span className="muted small">Still needed at current price</span><strong>USD 500</strong></div>
+        <div><span className="muted small">Still needed to reach target</span><strong>USD 450</strong></div>
       </div>
-      <div className="bar" role="img" aria-label="Sample savings progress: 29 percent">
+      <div className="bar" role="img" aria-label="Sample: USD 200 saved of the USD 700 current price, 29 percent">
         <div style={{ width: "29%" }} />
       </div>
-      <p className="small muted">29% of the total cost saved. Sample figures only.</p>
+      <p className="small muted">
+        Illustrative only, not your data. Sample savings: USD 200, which is 29% of the USD 700 current price.
+      </p>
     </section>
   );
 }

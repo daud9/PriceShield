@@ -8,8 +8,12 @@ import TrackedProducts from "./components/TrackedProducts";
 import Landing from "./components/Landing";
 import Dashboard from "./components/Dashboard";
 import Compare from "./components/Compare";
+import IntelligenceScreen from "./components/IntelligenceScreen";
+import SavingsScreen from "./components/SavingsScreen";
+import AlertsScreen from "./components/AlertsScreen";
+import SettingsScreen from "./components/SettingsScreen";
 
-type Screen = "intro" | "form" | "plan" | "track" | "dashboard" | "compare";
+type Screen = "intro" | "form" | "plan" | "track" | "dashboard" | "compare" | "intelligence" | "savings" | "alerts" | "settings";
 
 interface Form {
   productName: string;
@@ -104,6 +108,22 @@ export default function App() {
       comparisons: compareAlternatives(input, alternatives),
     };
   }, [input, alts, target]);
+
+  if (screen === "intelligence") {
+    return <IntelligenceScreen onBack={() => setScreen("intro")} />;
+  }
+
+  if (screen === "savings") {
+    return <SavingsScreen onBack={() => setScreen("intro")} />;
+  }
+
+  if (screen === "alerts") {
+    return <AlertsScreen onBack={() => setScreen("intro")} />;
+  }
+
+  if (screen === "settings") {
+    return <SettingsScreen onBack={() => setScreen("intro")} />;
+  }
 
   if (screen === "compare") {
     return <Compare onBack={() => setScreen("intro")} />;

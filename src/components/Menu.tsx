@@ -1,13 +1,25 @@
 import { useEffect } from "react";
 
-export type NavTarget = "intro" | "dashboard" | "track" | "compare";
+export type NavTarget =
+  | "intro"
+  | "dashboard"
+  | "track"
+  | "compare"
+  | "intelligence"
+  | "savings"
+  | "alerts"
+  | "settings";
 
-// Only screens that are built appear here. Alerts and Settings are not built yet.
+// Every item opens a working screen.
 const ITEMS: { label: string; target: NavTarget }[] = [
   { label: "Overview", target: "intro" },
   { label: "My Goals", target: "dashboard" },
   { label: "Tracked Products", target: "track" },
+  { label: "Price Intelligence", target: "intelligence" },
   { label: "Compare Products", target: "compare" },
+  { label: "Savings Progress", target: "savings" },
+  { label: "Alerts", target: "alerts" },
+  { label: "Settings", target: "settings" },
 ];
 
 interface Props {
