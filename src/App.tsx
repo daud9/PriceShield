@@ -4,8 +4,9 @@ import {
 } from "./lib/engine";
 import { formatMoney, MoneyError, parseMoney } from "./lib/money";
 import { connectNimiq, isInNimiqPay } from "./nimiq/nimiq";
+import TrackedProducts from "./components/TrackedProducts";
 
-type Screen = "intro" | "form" | "plan";
+type Screen = "intro" | "form" | "plan" | "track";
 
 interface Form {
   productName: string;
@@ -101,6 +102,10 @@ export default function App() {
     };
   }, [input, alts, target]);
 
+  if (screen === "track") {
+    return <TrackedProducts onBack={() => setScreen("intro")} />;
+  }
+
   if (screen === "intro") {
     return (
       <main className="wrap">
@@ -115,6 +120,7 @@ export default function App() {
             and recalculates when the price changes.
           </p>
           <button className="primary" onClick={() => setScreen("form")}>Create your first goal</button>
+          <button className="ghost" onClick={() => setScreen("track")}>Track a product</button>
           {isInNimiqPay() && <p className="muted small">Connected to Nimiq Pay.</p>}
         </section>
       </main>
