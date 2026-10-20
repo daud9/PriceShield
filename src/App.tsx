@@ -7,8 +7,9 @@ import { connectNimiq } from "./nimiq/nimiq";
 import TrackedProducts from "./components/TrackedProducts";
 import Landing from "./components/Landing";
 import Dashboard from "./components/Dashboard";
+import Compare from "./components/Compare";
 
-type Screen = "intro" | "form" | "plan" | "track" | "dashboard";
+type Screen = "intro" | "form" | "plan" | "track" | "dashboard" | "compare";
 
 interface Form {
   productName: string;
@@ -104,6 +105,10 @@ export default function App() {
     };
   }, [input, alts, target]);
 
+  if (screen === "compare") {
+    return <Compare onBack={() => setScreen("intro")} />;
+  }
+
   if (screen === "dashboard") {
     return <Dashboard onBack={() => setScreen("intro")} />;
   }
@@ -114,11 +119,7 @@ export default function App() {
 
   if (screen === "intro") {
     return (
-      <Landing
-        onCreateGoal={() => setScreen("track")}
-        onTrackProduct={() => setScreen("track")}
-        onDashboard={() => setScreen("dashboard")}
-      />
+      <Landing onNavigate={(target) => setScreen(target)} />
     );
   }
 

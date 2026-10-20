@@ -13,9 +13,12 @@ export interface Alert {
 export function planInput(p: TrackedProduct, today: string): PlanInput {
   const latest = p.history[p.history.length - 1];
   const cur = p.currency;
+  const alt = p.activeAlternativeId
+    ? p.alternatives?.find((a) => a.id === p.activeAlternativeId)
+    : undefined;
   return {
-    productName: p.name,
-    price: money(BigInt(latest.minor), cur),
+    productName: alt ? alt.name : p.name,
+    price: money(BigInt(alt ? alt.minor : latest.minor), cur),
     reportedSavings: money(BigInt(p.savedMinor), cur),
     deliveryCost: money(BigInt(p.deliveryMinor), cur),
     otherCosts: money(BigInt(p.otherMinor), cur),

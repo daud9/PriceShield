@@ -92,3 +92,21 @@ export function formatMoney(m: Money): string {
   const body = dp > 0 ? `${wholeStr}.${frac}` : wholeStr;
   return `${negative ? "-" : ""}${m.currency} ${body}`;
 }
+
+/** Like parseMoney, but returns an error message instead of throwing. */
+export function tryParseMoney(raw: string, currency: string): Money | string {
+  try {
+    return parseMoney(raw, currency);
+  } catch (e) {
+    return (e as Error).message;
+  }
+}
+
+/** Plain decimal text for form fields, for example "700.00" or "500". */
+export function toDecimalString(m: Money): string {
+  const dp = decimalsFor(m.currency);
+  const scale = 10n ** BigInt(dp);
+  const whole = m.minor / scale;
+  if (dp === 0) return whole.toString();
+  return `${whole}.${(m.minor % scale).toString().padStart(dp, "0")}`;
+}

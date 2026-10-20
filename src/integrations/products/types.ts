@@ -28,6 +28,15 @@ export interface TrackedProduct {
   trackingMode: "manual";
   createdAt: string;
   archived?: boolean;
+  alternatives?: Alternative[];
+  activeAlternativeId?: string; // when set, the plan uses this alternative's price
+}
+
+export interface Alternative {
+  id: string;
+  name: string;
+  minor: string;
+  requirements?: string;
 }
 
 export type LookupResult =

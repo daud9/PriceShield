@@ -8,6 +8,7 @@ import { planInput } from "../lib/alerts";
 import PriceHistoryChart from "./PriceHistoryChart";
 import SavingsProgress from "./SavingsProgress";
 import ShareReport from "./ShareReport";
+import EditGoal from "./EditGoal";
 
 interface Row {
   p: TrackedProduct;
@@ -21,6 +22,7 @@ export default function Dashboard({ onBack }: { onBack: () => void }) {
   const [products, setProducts] = useState<TrackedProduct[]>(() => loadProducts());
   const [openId, setOpenId] = useState<string | null>(null);
   const [showArchived, setShowArchived] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
 
   const persist = (next: TrackedProduct[]) => {
@@ -81,11 +83,28 @@ export default function Dashboard({ onBack }: { onBack: () => void }) {
     setNotice(`Deleted "${p.name}" and its savings plan.`);
   }
 
+  function saveEdit(updated: TrackedProduct) {
+    persist(products.map((x) => (x.id === updated.id ? updated : x)));
+    setEditingId(null);
+    setNotice(`Saved changes to "${updated.name}".`);
+  }
+
   function statusLabel(r: PlanResult | null) {
     return r ? r.status.replace("_", " ") : "invalid";
   }
 
   function goalCard(x: Row) {
+    if (editingId === x.p.id) {
+      return (
+        <EditGoal
+          key={x.p.id}
+          product={x.p}
+          today={today}
+          onSave={saveEdit}
+          onCancel={() => setEditingId(null)}
+        />
+      );
+    }
     const open = openId === x.p.id;
     return (
       <article className="card" key={x.p.id}>
@@ -101,6 +120,7 @@ export default function Dashboard({ onBack }: { onBack: () => void }) {
           <button className="ghost" onClick={() => setOpenId(open ? null : x.p.id)}>
             {open ? "Hide details" : "Details"}
           </button>
+          <button className="ghost" onClick={() => setEditingId(x.p.id)}>Edit</button>
           <button className="ghost" onClick={() => toggleArchive(x.p)}>
             {x.p.archived ? "Restore" : "Archive"}
           </button>
