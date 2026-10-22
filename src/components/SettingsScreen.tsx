@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { loadProducts, saveProducts } from "../lib/productStorage";
-import { isInNimiqPay } from "../nimiq/nimiq";
+import { connectNimiq, useWalletState, walletLabel } from "../nimiq/nimiq";
 
 export default function SettingsScreen({ onBack }: { onBack: () => void }) {
   const [count, setCount] = useState(() => loadProducts().length);
   const [exported, setExported] = useState("");
   const [confirmText, setConfirmText] = useState("");
   const [notice, setNotice] = useState("");
+  const wallet = useWalletState();
 
   function exportData() {
     const text = JSON.stringify(loadProducts(), null, 2);
@@ -69,11 +70,12 @@ export default function SettingsScreen({ onBack }: { onBack: () => void }) {
 
       <section className="card">
         <h2>Nimiq Pay</h2>
+        <p className="small">{walletLabel(wallet)}</p>
         <p className="small muted">
-          {isInNimiqPay()
-            ? "Connected to Nimiq Pay."
-            : "Not connected. Nimiq Pay payments are not implemented yet, so no payment or contribution is recorded."}
+          Connecting only reads your account list. Payments are not implemented yet, so no payment or contribution
+          is recorded.
         </p>
+        <button className="ghost" onClick={() => connectNimiq()}>Connect or retry</button>
       </section>
     </main>
   );

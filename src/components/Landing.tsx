@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { isInNimiqPay } from "../nimiq/nimiq";
+import { useWalletState, walletLabel } from "../nimiq/nimiq";
 import Menu, { type NavTarget } from "./Menu";
 
 interface Props {
@@ -98,6 +98,13 @@ const BENEFITS = [
 
 export default function Landing({ onNavigate }: Props) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const wallet = useWalletState();
+  const chipText =
+    wallet.status === "connected"
+      ? "Nimiq connected"
+      : wallet.status === "connecting"
+        ? "Connecting..."
+        : "Nimiq not connected";
   const go = (target: NavTarget) => {
     setMenuOpen(false);
     onNavigate(target);
@@ -121,6 +128,7 @@ export default function Landing({ onNavigate }: Props) {
           <ShieldLogo />
           <span className="logo">PriceShield</span>
         </span>
+        <span className="chip" data-wallet={wallet.status} style={{ marginLeft: "auto" }}>{chipText}</span>
       </header>
 
       <Menu open={menuOpen} current="intro" onClose={() => setMenuOpen(false)} onNavigate={go} />
@@ -164,7 +172,7 @@ export default function Landing({ onNavigate }: Props) {
         <p>
           Prices are entered by you. PriceShield does not monitor stores live, and it does not hold or lock your funds.
         </p>
-        {isInNimiqPay() && <p>Connected to Nimiq Pay.</p>}
+        <p>{walletLabel(wallet)}</p>
       </footer>
     </main>
   );
