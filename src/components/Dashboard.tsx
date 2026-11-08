@@ -9,6 +9,7 @@ import PriceHistoryChart from "./PriceHistoryChart";
 import SavingsProgress from "./SavingsProgress";
 import ShareReport from "./ShareReport";
 import EditGoal from "./EditGoal";
+import ContributionPanel from "./ContributionPanel";
 
 interface Row {
   p: TrackedProduct;
@@ -131,6 +132,13 @@ export default function Dashboard({ onBack }: { onBack: () => void }) {
             <h3 className="small">Price history</h3>
             <PriceHistoryChart history={x.p.history} currency={x.p.currency} />
             <ShareReport product={x.p} today={today} />
+            {x.p.currency === "NIM" && (
+              <ContributionPanel
+                product={x.p}
+                today={today}
+                onUpdate={(u) => persist(products.map((y) => (y.id === u.id ? u : y)))}
+              />
+            )}
           </>
         )}
       </article>

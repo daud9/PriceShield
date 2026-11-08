@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { loadProducts } from "../lib/productStorage";
 import { useWalletState, walletLabel } from "../nimiq/nimiq";
 import Menu, { type NavTarget } from "./Menu";
 
@@ -55,37 +56,30 @@ function Icon({ kind }: { kind: "tag" | "grid" | "compare" }) {
   );
 }
 
-/** Illustrative only. Fixed sample values and a sample line, not user or market data. */
-function PriceTagPreview() {
+/** Shown only when no data is saved. It contains no figures. */
+function GettingStarted({ onNavigate }: { onNavigate: (t: NavTarget) => void }) {
   return (
-    <section className="ticket" aria-label="Illustrative example">
-      <div className="ticket-top">
-        <span className="chip">Illustrative sample</span>
-        <span className="pill" data-status="on_track">On track</span>
-      </div>
-      <h3>Laptop</h3>
-      <svg className="spark" viewBox="0 0 300 70" role="img" aria-label="Sample price line, not real data">
-        <defs>
-          <linearGradient id="spark-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#8b6cff" stopOpacity="0.35" />
-            <stop offset="1" stopColor="#8b6cff" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <path d="M0 20 L50 28 L100 18 L150 34 L200 26 L250 44 L300 40 L300 70 L0 70 Z" fill="url(#spark-fill)" />
-        <path d="M0 20 L50 28 L100 18 L150 34 L200 26 L250 44 L300 40" fill="none" stroke="#ffc857" strokeWidth="2.5" strokeLinejoin="round" />
-      </svg>
-      <div className="ticket-grid">
-        <div><span className="muted small">Current price</span><strong>USD 700</strong></div>
-        <div><span className="muted small">Target price</span><strong>USD 650</strong></div>
-        <div><span className="muted small">Still needed at current price</span><strong>USD 500</strong></div>
-        <div><span className="muted small">Still needed to reach target</span><strong>USD 450</strong></div>
-      </div>
-      <div className="bar" role="img" aria-label="Sample: USD 200 saved of the USD 700 current price, 29 percent">
-        <div style={{ width: "29%" }} />
-      </div>
+    <section className="card" aria-label="Getting started">
+      <h2>Start your first plan</h2>
       <p className="small muted">
-        Illustrative only, not your data. Sample savings: USD 200, which is 29% of the USD 700 current price.
+        You have no saved goals yet. PriceShield only shows figures you enter.
       </p>
+      <ol className="steps">
+        <li>Paste a product link and enter its current price.</li>
+        <li>Set a target price, the savings you have, and a regular contribution.</li>
+        <li>Record new prices when you see them, and check your readiness date.</li>
+      </ol>
+      <button className="primary" onClick={() => onNavigate("track")}>Track your first product</button>
+    </section>
+  );
+}
+
+function ContinueCard({ onNavigate }: { onNavigate: (t: NavTarget) => void }) {
+  return (
+    <section className="card" aria-label="Your plans">
+      <h2>Your plans</h2>
+      <p className="small muted">Open your dashboard to see your goals, savings and deadlines.</p>
+      <button className="primary" onClick={() => onNavigate("dashboard")}>Open my dashboard</button>
     </section>
   );
 }
@@ -98,6 +92,7 @@ const BENEFITS = [
 
 export default function Landing({ onNavigate }: Props) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hasData] = useState(() => loadProducts().length > 0);
   const wallet = useWalletState();
   const chipText =
     wallet.status === "connected"
@@ -105,6 +100,7 @@ export default function Landing({ onNavigate }: Props) {
       : wallet.status === "connecting"
         ? "Connecting..."
         : "Nimiq not connected";
+
   const go = (target: NavTarget) => {
     setMenuOpen(false);
     onNavigate(target);
@@ -154,7 +150,7 @@ export default function Landing({ onNavigate }: Props) {
         </div>
       </section>
 
-      <PriceTagPreview />
+      {hasData ? <ContinueCard onNavigate={go} /> : <GettingStarted onNavigate={go} />}
 
       <section className="benefits" aria-label="What PriceShield does">
         {BENEFITS.map((b, i) => (

@@ -29,7 +29,20 @@ export interface TrackedProduct {
   createdAt: string;
   archived?: boolean;
   alternatives?: Alternative[];
+  contributions?: Contribution[];
   activeAlternativeId?: string; // when set, the plan uses this alternative's price
+}
+
+// A NIM payment sent through Nimiq Pay. "submitted" means the wallet returned a hash.
+// It does not prove the transaction executed. Only "verified" counts as verified savings.
+export interface Contribution {
+  id: string;
+  minor: string; // Luna (1 NIM = 100,000 Luna)
+  currency: "NIM";
+  at: string;
+  status: "submitted" | "verified";
+  txHash: string;
+  recipient: string;
 }
 
 export interface Alternative {

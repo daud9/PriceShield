@@ -1,6 +1,7 @@
 import type { PriceObservation, TrackedProduct } from "../integrations/products/types";
 import { evaluatePlan, type PlanInput } from "./engine";
 import { formatMoney, money } from "./money";
+import { verifiedMinor } from "./contributions";
 
 export interface Alert {
   kind: "price_up" | "price_down" | "target_reached" | "deadline_unrealistic" | "funded";
@@ -20,6 +21,7 @@ export function planInput(p: TrackedProduct, today: string): PlanInput {
     productName: alt ? alt.name : p.name,
     price: money(BigInt(alt ? alt.minor : latest.minor), cur),
     reportedSavings: money(BigInt(p.savedMinor), cur),
+    verifiedSavings: money(verifiedMinor(p), cur),
     deliveryCost: money(BigInt(p.deliveryMinor), cur),
     otherCosts: money(BigInt(p.otherMinor), cur),
     contribution: money(BigInt(p.contributionMinor), cur),

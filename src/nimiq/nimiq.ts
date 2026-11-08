@@ -8,7 +8,7 @@
 // "not connected" status instead of breaking.
 
 import { useEffect, useState } from "react";
-import { init } from "@nimiq/mini-app-sdk";
+import { init, NimiqProviderError } from "@nimiq/mini-app-sdk";
 
 export type WalletState =
   | { status: "idle" }
@@ -68,5 +68,27 @@ export function walletLabel(s: WalletState): string {
       return s.message;
     default:
       return "Nimiq Pay not connected.";
+  }
+}
+
+export type SendResult = { ok: true; txHash: string } | { ok: false; reason: string };
+
+/**
+ * Asks Nimiq Pay to send a NIM payment. Nimiq Pay shows its own confirmation.
+ * A returned hash only means the wallet submitted the transaction. It does not prove the transaction executed.
+ */
+export async function sendContribution(recipient: string, luna: bigint): Promise<SendResult> {
+  if (!instance) return { ok: false, reason: "Connect Nimiq Pay before sending." };
+  try {
+    const txHash = await instance.sendBasicTransaction({ recipient, value: Number(luna) });
+    return { ok: true, txHash };
+  } catch (e) {
+    if (NimiqProviderError.is(e) && e.type === "PERMISSION_DENIED") {
+      return { ok: false, reason: "Cancelled in Nimiq Pay. Nothing was sent." };
+    }
+    return {
+      ok: false,
+      reason: "Nimiq Pay did not confirm the payment. Nothing was recorded. Check your Nimiq Pay history before sending again.",
+    };
   }
 }
