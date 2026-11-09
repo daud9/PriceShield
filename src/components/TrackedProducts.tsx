@@ -8,6 +8,7 @@ import { latestObservation, recordPrice } from "../lib/priceHistory";
 import { alertsForChange, planInput, type Alert } from "../lib/alerts";
 import { validateProductUrl } from "../lib/url";
 import PriceIntelligence from "./PriceIntelligence";
+import StartSaving from "./StartSaving";
 
 interface FormState {
   url: string;
@@ -106,6 +107,7 @@ export default function TrackedProducts({ onBack }: { onBack: () => void }) {
   const [notice, setNotice] = useState("");
   const [priceInput, setPriceInput] = useState<Record<string, string>>({});
   const [alerts, setAlerts] = useState<Record<string, Alert[]>>({});
+  const [planOpenId, setPlanOpenId] = useState<string | null>(null);
 
   const persist = (next: TrackedProduct[]) => {
     setProducts(next);
@@ -204,6 +206,20 @@ export default function TrackedProducts({ onBack }: { onBack: () => void }) {
           </dl>
         ) : (
           <p className="errors">{outcome.errors.join(" ")}</p>
+        )}
+
+        <div className="row">
+          <button className="primary" type="button" onClick={() => setPlanOpenId(planOpenId === p.id ? null : p.id)}>
+            {p.savingsAsset ? "View Savings Plan" : "Start Saving"}
+          </button>
+        </div>
+        {planOpenId === p.id && (
+          <StartSaving
+            product={p}
+            today={today}
+            onSave={(u) => persist(products.map((x) => (x.id === u.id ? u : x)))}
+            onClose={() => setPlanOpenId(null)}
+          />
         )}
 
         <PriceIntelligence product={p} today={today} />

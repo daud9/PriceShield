@@ -12,8 +12,9 @@ import IntelligenceScreen from "./components/IntelligenceScreen";
 import SavingsScreen from "./components/SavingsScreen";
 import AlertsScreen from "./components/AlertsScreen";
 import SettingsScreen from "./components/SettingsScreen";
+import ConverterScreen from "./components/ConverterScreen";
 
-type Screen = "intro" | "form" | "plan" | "track" | "dashboard" | "compare" | "intelligence" | "savings" | "alerts" | "settings";
+type Screen = "intro" | "form" | "plan" | "track" | "dashboard" | "compare" | "intelligence" | "savings" | "alerts" | "settings" | "converter";
 
 interface Form {
   productName: string;
@@ -119,6 +120,10 @@ export default function App() {
 
   if (screen === "alerts") {
     return <AlertsScreen onBack={() => setScreen("intro")} />;
+  }
+
+  if (screen === "converter") {
+    return <ConverterScreen onBack={() => setScreen("intro")} />;
   }
 
   if (screen === "settings") {

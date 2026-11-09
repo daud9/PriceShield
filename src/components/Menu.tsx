@@ -8,7 +8,8 @@ export type NavTarget =
   | "intelligence"
   | "savings"
   | "alerts"
-  | "settings";
+  | "settings"
+  | "converter";
 
 // Every item opens a working screen.
 const ITEMS: { label: string; target: NavTarget }[] = [
@@ -20,6 +21,7 @@ const ITEMS: { label: string; target: NavTarget }[] = [
   { label: "Savings Progress", target: "savings" },
   { label: "Alerts", target: "alerts" },
   { label: "Settings", target: "settings" },
+  { label: "Currency Converter", target: "converter" },
 ];
 
 interface Props {

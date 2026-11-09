@@ -17,9 +17,10 @@ export function planInput(p: TrackedProduct, today: string): PlanInput {
   const alt = p.activeAlternativeId
     ? p.alternatives?.find((a) => a.id === p.activeAlternativeId)
     : undefined;
+  const locked = p.savingsTarget === "locked" && p.priceLock ? p.priceLock : undefined;
   return {
     productName: alt ? alt.name : p.name,
-    price: money(BigInt(alt ? alt.minor : latest.minor), cur),
+    price: money(BigInt(alt ? alt.minor : locked ? locked.minor : latest.minor), cur),
     reportedSavings: money(BigInt(p.savedMinor), cur),
     verifiedSavings: money(verifiedMinor(p), cur),
     deliveryCost: money(BigInt(p.deliveryMinor), cur),

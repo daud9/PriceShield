@@ -30,6 +30,9 @@ export interface TrackedProduct {
   archived?: boolean;
   alternatives?: Alternative[];
   contributions?: Contribution[];
+  priceLock?: PriceLock;
+  savingsTarget?: "live" | "locked"; // which fiat amount the savings plan follows
+  savingsAsset?: "NIM";              // USDC is not offered until its network and payments are verified
   activeAlternativeId?: string; // when set, the plan uses this alternative's price
 }
 
@@ -43,6 +46,14 @@ export interface Contribution {
   status: "submitted" | "verified";
   txHash: string;
   recipient: string;
+}
+
+// A Price Lock records the fiat amount the user chose to protect as their savings target.
+// It never changes on its own. It is a record of the user's target, not a merchant guarantee.
+export interface PriceLock {
+  minor: string;      // fiat amount in minor units
+  currency: string;
+  createdAt: string;  // YYYY-MM-DD
 }
 
 export interface Alternative {
