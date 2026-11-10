@@ -14,7 +14,7 @@ Custom domain: https://priceshield.web.id (DNS and certificate setup in progress
 - **Start Saving.** Each tracked product has a Start Saving panel. It saves the plan, then offers the NIM contribution form on the same card.
 - **Price Lock.** Lock the current recorded price as your savings target. The locked amount doesn't change until you update or unlock it. Choose "Follow live price" or "Use locked price."
 - **NIM contributions through Nimiq Pay.** Send NIM from the app. Nimiq Pay asks you to approve the payment, and the app records the transaction hash.
-- **On-chain verification.** Tap "Verify on-chain" to check a contribution against the network. It is marked verified only when the hash, recipient, amount, and execution result match, and the transaction has at least 10 confirmations. A verified 1 NIM test transfer has been confirmed this way.
+- **On-chain verification.** Tap "Verify on-chain" to check a contribution against the network. It is marked verified only when the hash, recipient, amount, and execution result match, and the transaction has at least 10 confirmations. A 1 NIM mainnet transfer has been verified this way, with 23 confirmations.
 - **Currency converter.** Enter your own EUR, GBP, or NGN rate per NIM, then convert in either direction. Results are labelled as estimates. Rates older than 7 days are flagged.
 - **Dashboard.** Summary, upcoming deadlines, targets reached, recent price changes, and goal cards with edit, archive, and delete.
 - **Comparison.** Enter alternative products by hand, compare them with the original, and set one as the active target without changing the original.
@@ -46,7 +46,7 @@ npm run build     # type-check and production build into dist/
 npm run dev       # development server
 ```
 
-The automated tests cover the readiness engine, money handling, URL validation, price history, alternatives, the report, conversion and rates, Price Lock, and on-chain verification rules. Verification tests use a real response from the Nimiq testing server.
+The automated tests cover the readiness engine, money handling, URL validation, price history, alternatives, the report, conversion and rates, Price Lock, and on-chain verification rules. Verification tests use a real response from `rpc.nimiqwatch.com` for a mainnet transfer.
 
 ## Deploy (Deno Deploy)
 
@@ -68,9 +68,8 @@ Each push to `main` triggers a new build. Check that the newest build shows **Su
 
 ### Before launch
 
-- **Replace the RPC endpoint.** `rpc.nimiqwatch.com` is a public testing server. Switch `NIMIQ_RPC_URL` in `src/lib/rpc.ts` to a production endpoint, and confirm it allows requests from your app's origin.
+- **Replace the RPC endpoint.** `rpc.nimiqwatch.com` serves mainnet data, but Nimiq's docs describe it as a testing service. Switch `NIMIQ_RPC_URL` in `src/lib/rpc.ts` to an endpoint Nimiq supports for production, and confirm it allows requests from your app's origin.
 - **Confirm the finality rule.** The app treats a transaction as final after 10 confirmations. This is an assumption, set in `src/lib/verification.ts`. Check it against the Nimiq docs.
-- **Confirm the network.** Nimiq Pay and the RPC endpoint must use the same network. Verify this before any real funds are used.
 
 ## Environment and secrets
 
@@ -79,7 +78,7 @@ The project needs no API keys or private keys. Do not commit seed phrases, priva
 ## Known limitations
 
 - Savings and prices are user-entered. Nothing is checked against a merchant.
-- Verification depends on a public testing server until a production endpoint is set.
+- Verification uses `rpc.nimiqwatch.com`, a public server that serves mainnet data but is documented as a testing service. Move to a production endpoint before launch.
 - Browser storage can be cleared. Use Settings → Export my data to keep a copy.
 - Alerts are calculated when you open the Alerts screen. They are not push notifications.
 - Verified NIM counts only toward NIM-priced goals, as described above.
