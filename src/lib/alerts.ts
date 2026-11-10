@@ -22,7 +22,7 @@ export function planInput(p: TrackedProduct, today: string): PlanInput {
     productName: alt ? alt.name : p.name,
     price: money(BigInt(alt ? alt.minor : locked ? locked.minor : latest.minor), cur),
     reportedSavings: money(BigInt(p.savedMinor), cur),
-    verifiedSavings: money(verifiedMinor(p), cur),
+    verifiedSavings: cur === "NIM" ? money(verifiedMinor(p), cur) : undefined,
     deliveryCost: money(BigInt(p.deliveryMinor), cur),
     otherCosts: money(BigInt(p.otherMinor), cur),
     contribution: money(BigInt(p.contributionMinor), cur),

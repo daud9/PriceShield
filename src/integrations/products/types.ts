@@ -43,7 +43,9 @@ export interface Contribution {
   minor: string; // Luna (1 NIM = 100,000 Luna)
   currency: "NIM";
   at: string;
-  status: "submitted" | "verified";
+  status: "submitted" | "verified" | "failed";
+  verifiedAt?: string;
+  note?: string;
   txHash: string;
   recipient: string;
 }

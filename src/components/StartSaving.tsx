@@ -5,6 +5,7 @@ import { formatMoney, money } from "../lib/money";
 import { latestObservation } from "../lib/priceHistory";
 import { isStale, loadRates } from "../lib/rates";
 import { lockPrice, unlockPrice } from "../lib/savings";
+import ContributionPanel from "./ContributionPanel";
 
 // NIM equivalents need a rate. Only these fiat currencies have a converter.
 const CONVERTIBLE = ["EUR", "GBP", "NGN"];
@@ -18,6 +19,7 @@ interface Props {
 
 export default function StartSaving({ product, today, onSave, onClose }: Props) {
   const [draft, setDraft] = useState<TrackedProduct>(product);
+  const [saved, setSaved] = useState<TrackedProduct | null>(product.savingsAsset ? product : null);
   const [notice, setNotice] = useState("");
 
   const latest = latestObservation(draft);
@@ -58,9 +60,16 @@ export default function StartSaving({ product, today, onSave, onClose }: Props) 
     setNotice("");
   }
 
-  function save() {
-    onSave({ ...draft, savingsAsset: "NIM" });
-    onClose();
+  function savePlan() {
+    const next: TrackedProduct = { ...draft, savingsAsset: "NIM" };
+    onSave(next);
+    setSaved(next);
+    setNotice("Plan saved. Send your first contribution below. Nothing is sent until you approve it in Nimiq Pay.");
+  }
+
+  function updateSaved(u: TrackedProduct) {
+    setSaved(u);
+    onSave(u);
   }
 
   return (
@@ -125,10 +134,17 @@ export default function StartSaving({ product, today, onSave, onClose }: Props) 
 
       {notice && <p className="small" role="status">{notice}</p>}
 
-      <div className="row">
-        <button className="primary" type="button" onClick={save}>Save savings plan</button>
-        <button className="ghost" type="button" onClick={onClose}>Cancel</button>
-      </div>
+      {!saved ? (
+        <div className="row">
+          <button className="primary" type="button" onClick={savePlan}>Save plan</button>
+          <button className="ghost" type="button" onClick={onClose}>Cancel</button>
+        </div>
+      ) : (
+        <>
+          <ContributionPanel product={saved} today={today} onUpdate={updateSaved} />
+          <button className="ghost" type="button" onClick={onClose}>Close</button>
+        </>
+      )}
     </section>
   );
 }
