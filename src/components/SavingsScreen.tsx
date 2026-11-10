@@ -25,7 +25,9 @@ export default function SavingsScreen({ onBack }: { onBack: () => void }) {
         <button className="ghost" onClick={onBack}>Back</button>
         <span className="tag">Savings Progress</span>
       </header>
-      <p className="small muted">Savings are entered by you. None are verified on-chain yet.</p>
+      <p className="small muted">
+        Amounts marked verified are confirmed on-chain. Other savings are entered by you and are not verified.
+      </p>
 
       {Object.entries(totals).map(([cur, t]) => (
         <section className="card" key={cur}>

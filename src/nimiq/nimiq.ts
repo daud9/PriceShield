@@ -86,9 +86,10 @@ export async function sendContribution(recipient: string, luna: bigint): Promise
     if (NimiqProviderError.is(e) && e.type === "PERMISSION_DENIED") {
       return { ok: false, reason: "Cancelled in Nimiq Pay. Nothing was sent." };
     }
+    const detail = NimiqProviderError.is(e) ? e.type : e instanceof Error ? e.message : String(e);
     return {
       ok: false,
-      reason: "Nimiq Pay did not confirm the payment. Nothing was recorded. Check your Nimiq Pay history before sending again.",
+      reason: `Nimiq Pay did not confirm the payment (${detail}). Nothing was recorded in PriceShield. Check your Nimiq Pay history before sending again.`,
     };
   }
 }
